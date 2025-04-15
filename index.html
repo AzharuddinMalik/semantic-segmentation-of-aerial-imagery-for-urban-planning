@@ -1,0 +1,60 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Satellite Image Segmentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .drop-area {
+        border: 2px dashed #ccc;
+        border-radius: 1rem;
+        padding: 3rem;
+        text-align: center;
+        cursor: pointer;
+      }
+      .drop-area.dragover {
+        background-color: #f0f0f0;
+        border-color: #3182ce;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col items-center justify-center p-6">
+    <h1 class="text-3xl font-bold mb-8">Upload Satellite Image</h1>
+    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" class="w-full max-w-xl">
+      <input type="file" name="file" id="fileElem" class="hidden" accept="image/*" onchange="handleFiles(this.files)" />
+      <div class="drop-area" id="dropArea" onclick="fileElem.click()">
+        <p class="text-gray-600">Drag & drop or click to upload</p>
+      </div>
+      <div class="mt-6 text-center">
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Upload & Predict</button>
+      </div>
+    </form>
+
+    <script>
+      const dropArea = document.getElementById("dropArea");
+      const fileElem = document.getElementById("fileElem");
+
+      function handleFiles(files) {
+        dropArea.textContent = files[0].name;
+      }
+
+      dropArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropArea.classList.add("dragover");
+      });
+
+      dropArea.addEventListener("dragleave", () => {
+        dropArea.classList.remove("dragover");
+      });
+
+      dropArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropArea.classList.remove("dragover");
+        fileElem.files = e.dataTransfer.files;
+        handleFiles(e.dataTransfer.files);
+      });
+    </script>
+  </body>
+</html>
