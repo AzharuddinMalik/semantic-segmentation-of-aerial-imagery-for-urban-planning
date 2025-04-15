@@ -1,0 +1,2 @@
+# semantic-segmentation-of-aerial-imagery-for-urban-planning
+# Semantic Segmentation of Aerial Imagery 🌍  This project focuses on pixel-wise classification of aerial/satellite imagery using deep learning models like U-Net and ResNet-based UNet. The goal is to extract meaningful land features such as buildings, roads, water, and vegetation for urban planning, agriculture, and environmental analysis.
