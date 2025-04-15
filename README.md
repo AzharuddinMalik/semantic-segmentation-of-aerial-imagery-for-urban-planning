@@ -55,3 +55,34 @@ Dataset from [Humans in the Loop (Kaggle)](https://www.kaggle.com/datasets/human
     python app.py
 3.Open your browser at http://127.0.0.1:5000/ and upload an image to see predictions.
 
+
+
+📬 Contact
+For questions or collaboration, feel free to connect via GitHub Issues or Pull Requests!
+
+
+---
+
+### 📜 **GitHub Project Description**
+> Semantic segmentation of satellite imagery using deep learning (U-Net, ResNet34). Includes model training, evaluation, and a web app for real-time predictions.
+
+---
+
+### ✅ **Feature & Advantages Summary**
+
+**Features**
+- Patch-wise training using `patchify`
+- Dice + Focal loss combination
+- Multi-class label segmentation (6 classes)
+- Flask web app for deployment
+- Custom and pretrained U-Net models
+
+**Advantages**
+- Accurate pixel-level classification
+- Adaptable to different cities or satellite datasets
+- Useful in urban planning, agriculture, and disaster response
+- Easy-to-use web UI for demonstration
+
+---
+
+Let me know if you want me to generate the `requirements.txt` and `.gitignore` files for your repo as well!
