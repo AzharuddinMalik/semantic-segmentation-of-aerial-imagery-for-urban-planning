@@ -1,4 +1,3 @@
-# https://youtu.be/jvZm8REF2KY
 """
 
 https://www.kaggle.com/humansintheloop/semantic-segmentation-of-aerial-imagery
