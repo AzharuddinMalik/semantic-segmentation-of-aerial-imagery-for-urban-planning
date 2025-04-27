@@ -1,0 +1,157 @@
+<!-- how-it-works.html -->
+{% extends "layout.html" %}
+
+{% block title %}How It Works - Urban Insight{% endblock %}
+
+{% block content %}
+<div class="py-12 bg-gradient-to-b from-blue-900 to-blue-700 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4">How It Works</h1>
+        <p class="text-xl max-w-3xl mx-auto">Understanding the technology behind our satellite image segmentation platform.</p>
+    </div>
+</div>
+
+<div class="container mx-auto px-4 py-12">
+    <!-- Process Overview -->
+    <div class="max-w-5xl mx-auto mb-16">
+        <h2 class="text-2xl font-bold mb-8 text-center">The Segmentation Process</h2>
+        <div class="relative">
+            <!-- Process Steps -->
+            <div class="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-blue-200 -translate-y-1/2"></div>
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="relative">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 md:translate-y-0 md:mt-0 z-10">
+                        <div class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                    </div>
+                    <div class="pt-16 md:pt-20 bg-white p-6 rounded-lg shadow-md text-center relative z-0 h-full">
+                        <h3 class="font-bold text-lg mb-2">Image Upload</h3>
+                        <p class="text-gray-600">User uploads a satellite or aerial image of an urban area.</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 md:translate-y-0 md:mt-0 z-10">
+                        <div class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg">
+                            <i class="fas fa-crop-alt"></i>
+                        </div>
+                    </div>
+                    <div class="pt-16 md:pt-20 bg-white p-6 rounded-lg shadow-md text-center relative z-0 h-full">
+                        <h3 class="font-bold text-lg mb-2">Preprocessing</h3>
+                        <p class="text-gray-600">Image is resized and normalized to prepare for the neural network.</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 md:translate-y-0 md:mt-0 z-10">
+                        <div class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                    </div>
+                    <div class="pt-16 md:pt-20 bg-white p-6 rounded-lg shadow-md text-center relative z-0 h-full">
+                        <h3 class="font-bold text-lg mb-2">Segmentation</h3>
+                        <p class="text-gray-600">U-Net model processes the image to identify and label each pixel.</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 md:translate-y-0 md:mt-0 z-10">
+                        <div class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                    </div>
+                    <div class="pt-16 md:pt-20 bg-white p-6 rounded-lg shadow-md text-center relative z-0 h-full">
+                        <h3 class="font-bold text-lg mb-2">Analysis</h3>
+                        <p class="text-gray-600">Results are visualized and analyzed for urban planning insights.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technical Explanation -->
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold mb-8 text-center">Technical Deep Dive</h2>
+        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-10">
+            <div class="p-8">
+                <h3 class="text-xl font-bold mb-4">U-Net Architecture</h3>
+                <p class="text-gray-600 mb-4">
+                    Our segmentation model uses a U-Net architecture, which is specially designed for image segmentation tasks. The network consists of an encoder (contracting path) to capture context and a decoder (expanding path) that enables precise localization.
+                </p>
+                <p class="text-gray-600 mb-4">
+                    Key features of our implementation:
+                </p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-600 mb-4">
+                    <li>Skip connections between encoder and decoder to preserve spatial information</li>
+                    <li>Custom loss function combining Dice loss and Focal loss for better handling of class imbalance</li>
+                    <li>Jacard coefficient (IoU) as evaluation metric</li>
+                    <li>Data augmentation during training to improve generalization</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-10">
+            <div class="p-8">
+                <h3 class="text-xl font-bold mb-4">Class Categories</h3>
+                <p class="text-gray-600 mb-4">
+                    The model segments satellite imagery into 6 distinct categories:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded bg-blue-600"></div>
+                        <div>
+                            <p class="font-semibold">Water</p>
+                            <p class="text-sm text-gray-500">Rivers, lakes, and other water bodies</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded bg-green-500"></div>
+                        <div>
+                            <p class="font-semibold">Vegetation</p>
+                            <p class="text-sm text-gray-500">Trees, parks, and green spaces</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded bg-yellow-400"></div>
+                        <div>
+                            <p class="font-semibold">Roads</p>
+                            <p class="text-sm text-gray-500">Streets, highways, and transportation routes</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded bg-red-600"></div>
+                        <div>
+                            <p class="font-semibold">Buildings</p>
+                            <p class="text-sm text-gray-500">Structures and developed areas</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded bg-purple-700"></div>
+                        <div>
+                            <p class="font-semibold">Land</p>
+                            <p class="text-sm text-gray-500">Bare earth and undeveloped areas</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded bg-orange-500"></div>
+                        <div>
+                            <p class="font-semibold">Unlabeled</p>
+                            <p class="text-sm text-gray-500">Areas not falling into other categories</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="p-8">
+                <h3 class="text-xl font-bold mb-4">Confidence Mapping</h3>
+                <p class="text-gray-600 mb-4">
+                    For each segmented image, we also generate a confidence map that shows how certain the model is about its predictions for each pixel. Brighter areas in the confidence map indicate higher certainty.
+                </p>
+                <p class="text-gray-600">
+                    This is particularly useful for urban planners as it helps identify areas where additional verification might be needed, especially in complex urban environments where different land uses may blend together.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

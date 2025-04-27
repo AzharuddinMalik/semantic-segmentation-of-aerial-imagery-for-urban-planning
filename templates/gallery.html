@@ -1,0 +1,216 @@
+<!-- gallery.html -->
+{% extends "layout.html" %}
+
+{% block title %}Gallery - Urban Insight{% endblock %}
+
+{% block content %}
+<div class="py-12 bg-gradient-to-b from-blue-900 to-blue-700 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4">Example Gallery</h1>
+        <p class="text-xl max-w-3xl mx-auto">Explore our collection of sample segmentation results from different urban environments.</p>
+    </div>
+</div>
+
+<div class="container mx-auto px-4 py-12">
+    <!-- Filter Categories -->
+    <div class="mb-10 flex flex-wrap justify-center gap-2">
+        <button class="filter-btn active py-2 px-4 rounded-full bg-blue-600 text-white" data-filter="all">All Examples</button>
+        <button class="filter-btn py-2 px-4 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="urban">Urban</button>
+        <button class="filter-btn py-2 px-4 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="suburban">Suburban</button>
+        <button class="filter-btn py-2 px-4 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="mixed">Mixed Use</button>
+        <button class="filter-btn py-2 px-4 rounded-full bg-gray-200 hover:bg-gray-300" data-filter="waterfront">Waterfront</button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Example 1 -->
+        <div class="gallery-item urban" data-category="urban">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                         alt="Urban Center" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                        <div class="p-4 text-white">
+                            <h3 class="font-bold">Downtown District</h3>
+                            <p class="text-sm">Dense urban core with high-rise buildings</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm font-medium text-blue-600">Urban Center</span>
+                        <span class="text-xs text-gray-500">Size: 1.2 km²</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Buildings: 65%</span>
+                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Roads: 25%</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Vegetation: 10%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example 2 -->
+        <div class="gallery-item suburban" data-category="suburban">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                         alt="Suburban Area" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                        <div class="p-4 text-white">
+                            <h3 class="font-bold">Residential Suburb</h3>
+                            <p class="text-sm">Low-density housing with ample green space</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm font-medium text-blue-600">Suburban Area</span>
+                        <span class="text-xs text-gray-500">Size: 2.5 km²</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Buildings: 30%</span>
+                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Roads: 15%</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Vegetation: 55%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example 3 -->
+        <div class="gallery-item mixed" data-category="mixed">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                         alt="Mixed Use" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                        <div class="p-4 text-white">
+                            <h3 class="font-bold">Commercial District</h3>
+                            <p class="text-sm">Mixed use area with retail and offices</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm font-medium text-blue-600">Mixed Use</span>
+                        <span class="text-xs text-gray-500">Size: 1.8 km²</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Buildings: 50%</span>
+                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Roads: 30%</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Vegetation: 20%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example 4 -->
+        <div class="gallery-item waterfront" data-category="waterfront">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                         alt="Waterfront Development" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                        <div class="p-4 text-white">
+                            <h3 class="font-bold">Harbor District</h3>
+                            <p class="text-sm">Urban waterfront with mixed development</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm font-medium text-blue-600">Waterfront</span>
+                        <span class="text-xs text-gray-500">Size: 1.5 km²</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Water: 40%</span>
+                        <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Buildings: 35%</span>
+                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Roads: 15%</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Vegetation: 10%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example 5 -->
+        <div class="gallery-item urban" data-category="urban">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1518638150340-f706e86654de?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                         alt="Urban Highway" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                        <div class="p-4 text-white">
+                            <h3 class="font-bold">Transportation Hub</h3>
+                            <p class="text-sm">Major highways and interchange</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm font-medium text-blue-600">Urban Infrastructure</span>
+                        <span class="text-xs text-gray-500">Size: 2.0 km²</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Roads: 60%</span>
+                        <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Buildings: 25%</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Vegetation: 15%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example 6 -->
+        <div class="gallery-item suburban" data-category="suburban">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1464823063530-08f10ed1a2dd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                         alt="Suburban Development" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                        <div class="p-4 text-white">
+                            <h3 class="font-bold">Planned Community</h3>
+                            <p class="text-sm">New suburban development with parks</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm font-medium text-blue-600">Suburban Development</span>
+                        <span class="text-xs text-gray-500">Size: 3.0 km²</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Vegetation: 45%</span>
+                        <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Buildings: 35%</span>
+                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Roads: 20%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+// Gallery filtering
+const filterButtons = document.querySelectorAll('.filter-btn');
+const galleryItems = document.querySelectorAll('.gallery-item');
+
+filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Update active button
+        filterButtons.forEach(btn => btn.classList.remove('active', 'bg-blue-600', 'text-white'));
+        filterButtons.forEach(btn => btn.classList.add('bg-gray-200'));
+        button.classList.add('active', 'bg-blue-600', 'text-white');
+        button.classList.remove('bg-gray-200');
+
+        const filter = button.getAttribute('data-filter');
+
+        galleryItems.forEach(item => {
+            if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+});
+{% endblock %}

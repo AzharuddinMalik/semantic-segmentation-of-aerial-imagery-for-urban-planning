@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Urban Insight - Satellite Image Segmentation{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block additional_css %}{% endblock %}
+    {% block head_extras %}{% endblock %}
+    <style>
+        .gradient-bg {
+            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+        }
+        .footer-wave {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%231e3a8a' fill-opacity='1' d='M0,64L48,80C96,96,192,128,288,122.7C384,117,480,75,576,64C672,53,768,75,864,101.3C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: 100% 100%;
+            height: 100px;
+            width: 100%;
+            margin-bottom: -5px;
+        }
+
+        {% block additional_styles %}{% endblock %}
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="/" class="flex items-center space-x-3">
+                    <i class="fas fa-satellite text-2xl"></i>
+                    <span class="font-bold text-xl">Urban Insight</span>
+                </a>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" class="hover:text-blue-200 transition">Home</a>
+                    <a href="/about" class="hover:text-blue-200 transition">About</a>
+                    <a href="/how-it-works" class="hover:text-blue-200 transition">How It Works</a>
+                    <a href="/gallery" class="hover:text-blue-200 transition">Gallery</a>
+                </nav>
+                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="md:hidden hidden pt-4 pb-2 transition-all duration-300">
+                <a href="/" class="block py-2 hover:text-blue-200 transition">Home</a>
+                <a href="/about" class="block py-2 hover:text-blue-200 transition">About</a>
+                <a href="/how-it-works" class="block py-2 hover:text-blue-200 transition">How It Works</a>
+                <a href="/gallery" class="block py-2 hover:text-blue-200 transition">Gallery</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer Wave -->
+    <div class="footer-wave"></div>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Urban Insight</h3>
+                    <p class="text-blue-200">Advanced satellite image segmentation for urban planning and development.</p>
+                    <div class="mt-4 flex space-x-4">
+                        <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-white hover:text-blue-200"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-blue-200">
+                        <li><a href="/" class="hover:text-white transition">Home</a></li>
+                        <li><a href="/about" class="hover:text-white transition">About</a></li>
+                        <li><a href="/how-it-works" class="hover:text-white transition">How It Works</a></li>
+                        <li><a href="/gallery" class="hover:text-white transition">Gallery</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Contact</h3>
+                    <p class="text-blue-200">Questions or suggestions? Reach out to us!</p>
+                    <p class="mt-2 text-blue-200">
+                        <i class="fas fa-envelope mr-2"></i> contact@urbaninsight.ai
+                    </p>
+                    <a href="https://github.com/AzharuddinMalik/semantic-segmentation-of-aerial-imagery-for-urban-planning"
+                       class="mt-4 inline-block px-4 py-2 bg-blue-700 rounded hover:bg-blue-600 transition">
+                        <i class="fab fa-github mr-2"></i> View on GitHub
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-blue-800 text-center text-blue-300">
+                <p>&copy; 2025 Urban Insight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

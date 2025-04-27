@@ -1,0 +1,68 @@
+<!-- about.html -->
+{% extends "layout.html" %}
+
+{% block title %}About - Urban Insight{% endblock %}
+
+{% block content %}
+<div class="py-12 bg-gradient-to-b from-blue-900 to-blue-700 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4">About This Project</h1>
+        <p class="text-xl max-w-3xl mx-auto">Learn about the technology and team behind our satellite image segmentation platform.</p>
+    </div>
+</div>
+
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-10">
+            <div class="p-8">
+                <h2 class="text-2xl font-bold mb-4">Project Overview</h2>
+                <p class="text-gray-600 mb-4">
+                    This project uses deep learning to perform semantic segmentation on aerial imagery for urban planning applications.
+                    The system identifies different land use categories like buildings, roads, vegetation, and water bodies from satellite images.
+                </p>
+                <p class="text-gray-600 mb-4">
+                    The core technology is based on a U-Net architecture, which is particularly effective for image segmentation tasks.
+                    The model was trained on a diverse dataset of satellite imagery to ensure accuracy across different urban environments.
+                </p>
+                <p class="text-gray-600">
+                    The web interface allows users to upload their own satellite images and receive detailed segmentation results instantly,
+                    making this technology accessible to urban planners, researchers, and developers.
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-10">
+            <div class="p-8">
+                <h2 class="text-2xl font-bold mb-4">Technical Details</h2>
+                <ul class="space-y-3 text-gray-600">
+                    <li><span class="font-semibold">Framework:</span> TensorFlow/Keras with custom loss functions</li>
+                    <li><span class="font-semibold">Architecture:</span> U-Net with optimized encoder-decoder structure</li>
+                    <li><span class="font-semibold">Classes:</span> 6 distinct land use categories</li>
+                    <li><span class="font-semibold">Web Framework:</span> Flask with Tailwind CSS for UI</li>
+                    <li><span class="font-semibold">Image Processing:</span> OpenCV for pre and post-processing</li>
+                    <li><span class="font-semibold">Deployment:</span> Containerized application ready for cloud deployment</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="p-8">
+                <h2 class="text-2xl font-bold mb-4">Future Development</h2>
+                <p class="text-gray-600 mb-4">
+                    This project is continuously evolving. Some of our planned improvements include:
+                </p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-600 mb-4">
+                    <li>Improved model accuracy through additional training data</li>
+                    <li>Support for temporal analysis to track urban changes over time</li>
+                    <li>API access for integration with other planning tools</li>
+                    <li>Additional metrics and analysis tools for urban planning applications</li>
+                    <li>Mobile application for field use</li>
+                </ul>
+                <p class="text-gray-600">
+                    We welcome contributions and feedback from the community to help improve this project.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
