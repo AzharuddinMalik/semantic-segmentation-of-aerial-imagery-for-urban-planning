@@ -1,0 +1,80 @@
+/* TwentyTwenty container */
+.twentytwenty-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Images inside the container */
+.twentytwenty-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+/* Overlay on top image */
+.twentytwenty-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* Handles */
+.twentytwenty-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 999;
+  cursor: ew-resize;
+  margin-left: -15px;
+  width: 30px;
+  background: rgba(255, 255, 255, 0);
+}
+
+/* Handle lines */
+.twentytwenty-handle:before,
+.twentytwenty-handle:after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  margin-top: -15px;
+  width: 3px;
+  height: 30px;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+}
+
+/* Left line */
+.twentytwenty-handle:before {
+  left: 10px;
+}
+
+/* Right line */
+.twentytwenty-handle:after {
+  right: 10px;
+}
+
+/* Labels */
+.twentytwenty-before-label,
+.twentytwenty-after-label {
+  position: absolute;
+  top: 0;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  font-size: 12px;
+  padding: 5px 10px;
+  z-index: 999;
+}
+
+.twentytwenty-before-label {
+  left: 10px;
+}
+
+.twentytwenty-after-label {
+  right: 10px;
+}

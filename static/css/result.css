@@ -1,0 +1,173 @@
+/* Base styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9fafb;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+}
+
+/* Tabs */
+.tab-button {
+    transition: all 0.3s ease;
+}
+.tab-button:hover {
+    color: #2563eb;
+}
+
+/* Active Tab content */
+.tab-content > div {
+    display: none;
+}
+.tab-content > div.active {
+    display: block;
+}
+
+/* Image comparison */
+.twentytwenty-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: white;
+}
+
+/* TwentyTwenty Handle */
+.twentytwenty-handle {
+    border: 3px solid white;
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.2);
+    height: 40px;
+    width: 40px;
+    margin-left: -20px;
+    margin-top: -20px;
+}
+
+/* Labels for images */
+.twentytwenty-before-label:before,
+.twentytwenty-after-label:before {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.875rem;
+}
+
+/* Legend Styling */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+    margin-top: 2rem;
+}
+
+.legend div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.legend-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Analysis Cards */
+.analysis-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.analysis-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Model info highlight */
+.model-info {
+    background: #e0f2fe;
+    border-left: 4px solid #3b82f6;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    border-radius: 0.375rem;
+}
+
+/* Intro Section */
+.intro-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Cards hover */
+.hover-card:hover {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .twentytwenty-container {
+        width: 100%;
+        aspect-ratio: 1/1;
+    }
+}
+/* Color Definitions */
+.bg-water { background-color: #E2A929; }
+.bg-vegetation { background-color: #FEDD3A; }
+.bg-road { background-color: #6EC1E4; }
+.bg-building { background-color: #3C1098; }
+.bg-land { background-color: #8429F6; }
+.bg-unlabeled { background-color: #9B9B9B; }
+
+.legend-box {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+.legend-box:hover {
+    transform: scale(1.1);
+}
+
+.confidence-scale {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    height: 12px;
+}
+.recommendation-card {
+    @apply bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all;
+    border-left: 4px solid #3b82f6;
+}
+.loader {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    z-index: 100;
+}
+
+.twentytwenty-container.loading .loader {
+    display: block;
+}
+
+.twentytwenty-container.loading img {
+    opacity: 0.3;
+}

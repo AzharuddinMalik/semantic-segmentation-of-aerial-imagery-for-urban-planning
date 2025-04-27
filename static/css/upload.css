@@ -1,0 +1,22 @@
+.drop-area {
+    border: 2px dashed #cbd5e0;
+    border-radius: 1rem;
+    padding: 3rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.drop-area:hover {
+    border-color: #4299e1;
+    background-color: #ebf8ff;
+}
+
+.drop-area.dragover {
+    background-color: #ebf8ff;
+    border-color: #4299e1;
+}
+
+#preview {
+    transition: all 0.3s ease;
+}
