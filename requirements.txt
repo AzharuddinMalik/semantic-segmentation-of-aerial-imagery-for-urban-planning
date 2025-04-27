@@ -2,7 +2,7 @@ opencv-python~=4.5.5.64
 numpy~=1.26.4
 matplotlib~=3.8.4
 patchify~=0.2.3
-pillow~=10.3.0
+pillow==10.3.0           
 segmentation-models
 tensorflow~=2.15.0
 scikit-learn~=1.6.1
