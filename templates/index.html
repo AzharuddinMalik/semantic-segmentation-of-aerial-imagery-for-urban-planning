@@ -1,60 +1,226 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Satellite Image Segmentation</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      .drop-area {
-        border: 2px dashed #ccc;
-        border-radius: 1rem;
-        padding: 3rem;
-        text-align: center;
-        cursor: pointer;
-      }
-      .drop-area.dragover {
-        background-color: #f0f0f0;
-        border-color: #3182ce;
-      }
-    </style>
-  </head>
-  <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col items-center justify-center p-6">
-    <h1 class="text-3xl font-bold mb-8">Upload Satellite Image</h1>
-    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" class="w-full max-w-xl">
-      <input type="file" name="file" id="fileElem" class="hidden" accept="image/*" onchange="handleFiles(this.files)" />
-      <div class="drop-area" id="dropArea" onclick="fileElem.click()">
-        <p class="text-gray-600">Drag & drop or click to upload</p>
-      </div>
-      <div class="mt-6 text-center">
-        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Upload & Predict</button>
-      </div>
-    </form>
+<head>
+    {% extends "layout.html" %}
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='js/hero.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+    {% endblock %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Insight - Satellite Image Segmentation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
-    <script>
-      const dropArea = document.getElementById("dropArea");
-      const fileElem = document.getElementById("fileElem");
+</head>
+<body>
+{% block content %}
 
-      function handleFiles(files) {
-        dropArea.textContent = files[0].name;
-      }
+<!-- Hero Section -->
+<section class="bg-gradient-to-b from-blue-900 to-blue-700 text-white py-16">
+    <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div class="hero-container">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Semantic Segmentation of Aerial Imagery</h1>
+                <p class="text-xl mb-8">Harnessing AI to transform urban planning through precise satellite image analysis</p>
+                <div class="flex space-x-4">
+                    <a href="#upload" class="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold hover:bg-blue-100 transition flex items-center">
+                        <i class="fas fa-cloud-upload-alt mr-2"></i> Try It Now
+                    </a>
+                    <a href="/how-it-works" class="border border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition flex items-center">
+                        <i class="fas fa-info-circle mr-2"></i> Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="hidden md:block relative">
+                <div class="hero-image shadow-xl rounded-lg overflow-hidden h-[450px]">
+                    <!-- Images will be inserted here by JavaScript -->
+                    <div class="hero-overlay absolute inset-0 bg-black/50 flex items-center justify-center">
+                        <div class="text-center p-6">
+                            <i class="fas fa-satellite text-4xl mb-4"></i>
+                            <p>Loading urban imagery...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-      dropArea.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        dropArea.classList.add("dragover");
-      });
+<!-- Project Description -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Transforming Urban Planning with AI</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="feature-card bg-gray-50 p-6 rounded-xl shadow-md">
+                <div class="icon-circle">
+                    <i class="fas fa-city text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Urban Development</h3>
+                <p class="text-gray-600">Optimize city planning with accurate land use analysis. Identify buildings, roads, vegetation, and water bodies for better urban development strategies.</p>
+            </div>
+            <div class="feature-card bg-gray-50 p-6 rounded-xl shadow-md">
+                <div class="icon-circle">
+                    <i class="fas fa-leaf text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Environmental Monitoring</h3>
+                <p class="text-gray-600">Track green spaces, monitor urban forestry, and analyze environmental changes over time to create more sustainable cities.</p>
+            </div>
+            <div class="feature-card bg-gray-50 p-6 rounded-xl shadow-md">
+                <div class="icon-circle">
+                    <i class="fas fa-road text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Infrastructure Planning</h3>
+                <p class="text-gray-600">Identify optimal locations for new infrastructure projects based on existing road networks, buildings, and natural features.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-      dropArea.addEventListener("dragleave", () => {
-        dropArea.classList.remove("dragover");
-      });
+<!-- Technology Overview -->
+<section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Powered by Advanced Technology</h2>
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4">How It Works:</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-2"><i class="fas fa-check-circle"></i></span>
+                            <span><span class="font-semibold">Deep Learning:</span> Utilizes a U-Net neural network architecture for precise pixel-level segmentation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-2"><i class="fas fa-check-circle"></i></span>
+                            <span><span class="font-semibold">Multi-Class Detection:</span> Identifies 6 distinct categories including water, vegetation, roads, buildings, and more</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-2"><i class="fas fa-check-circle"></i></span>
+                            <span><span class="font-semibold">Confidence Mapping:</span> Provides reliability metrics for each segmented area</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-2"><i class="fas fa-check-circle"></i></span>
+                            <span><span class="font-semibold">Interactive Results:</span> Visually compare original and segmented images with sliding comparison view</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                        <div class="text-blue-600 text-3xl mb-2">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h4 class="font-semibold">U-Net Architecture</h4>
+                        <p class="text-sm text-gray-600">Encoder-decoder network with skip connections</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                        <div class="text-blue-600 text-3xl mb-2">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h4 class="font-semibold">6 Classes</h4>
+                        <p class="text-sm text-gray-600">Precise multi-category segmentation</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                        <div class="text-blue-600 text-3xl mb-2">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <h4 class="font-semibold">High Accuracy</h4>
+                        <p class="text-sm text-gray-600">Trained on diverse satellite imagery</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                        <div class="text-blue-600 text-3xl mb-2">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h4 class="font-semibold">Real-time Processing</h4>
+                        <p class="text-sm text-gray-600">Fast inference for immediate results</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-      dropArea.addEventListener("drop", (e) => {
-        e.preventDefault();
-        dropArea.classList.remove("dragover");
-        fileElem.files = e.dataTransfer.files;
-        handleFiles(e.dataTransfer.files);
-      });
-    </script>
-  </body>
+<!-- Upload Section -->
+<section id="upload" class="py-16 bg-white">
+    <div class="container mx-auto px-4 max-w-3xl">
+        <h2 class="text-3xl font-bold text-center mb-8">Try It Yourself</h2>
+        <p class="text-center text-gray-600 mb-10">Upload a satellite image to see our semantic segmentation in action. The model will identify water, vegetation, roads, buildings, land, and unlabeled areas.</p>
+
+        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" class="bg-gray-50 p-8 rounded-xl shadow-md">
+            <input type="file" name="file" id="fileElem" class="hidden" accept="image/*" onchange="handleFiles(this.files)" />
+            <div class="drop-area mb-6" id="dropArea" onclick="fileElem.click()">
+                <div class="text-center">
+                    <i class="fas fa-cloud-upload-alt text-blue-500 text-4xl mb-4"></i>
+                    <p class="text-gray-600 mb-2">Drag & drop your satellite image here</p>
+                    <p class="text-gray-500 text-sm">or click to browse</p>
+                </div>
+            </div>
+            <div id="preview" class="hidden mb-6">
+                <p class="font-semibold mb-2">Selected Image:</p>
+                <div class="flex items-center space-x-4">
+                    <img id="imagePreview" class="h-20 w-20 object-cover rounded" />
+                    <div>
+                        <p id="fileName" class="font-medium"></p>
+                        <button type="button" id="removeFile" class="text-red-600 text-sm hover:text-red-800">
+                            <i class="fas fa-times mr-1"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg shadow hover:bg-blue-700 transition transform hover:scale-105 flex items-center justify-center mx-auto">
+                    <i class="fas fa-magic mr-2"></i> Analyze Image
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Sample Results Preview -->
+<section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">See Example Results</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <a href="/gallery" class="block">
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition">
+                    <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                         alt="City Example" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-2">Urban Area Analysis</h3>
+                        <p class="text-gray-600 text-sm">Dense metropolitan areas with complex building patterns and transportation networks.</p>
+                    </div>
+                </div>
+            </a>
+            <a href="/gallery" class="block">
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition">
+                    <img src="https://images.unsplash.com/photo-1464823063530-08f10ed1a2dd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                         alt="Suburban Example" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-2">Suburban Development</h3>
+                        <p class="text-gray-600 text-sm">Residential areas with a balance of buildings, roads, and green spaces.</p>
+                    </div>
+                </div>
+            </a>
+            <a href="/gallery" class="block">
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition">
+                    <img src="https://images.unsplash.com/photo-1504718844509-d64f7cebe5f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                         alt="Rural Example" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-2">Urban-Rural Interface</h3>
+                        <p class="text-gray-600 text-sm">Transitional zones where urban development meets agricultural and natural lands.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="text-center mt-10">
+            <a href="/gallery" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                <i class="fas fa-images mr-2"></i> View Full Gallery
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+</body>
+
 </html>
