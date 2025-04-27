@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, abort
 import os
 from werkzeug.utils import secure_filename
 import numpy as np
@@ -7,11 +7,15 @@ import cv2
 from tensorflow.keras.models import load_model
 import tensorflow.keras.backend as K
 import tensorflow as tf
+from flask import jsonify  # Add this import at the top
+from flask_wtf.csrf import CSRFProtect
+
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/uploads/'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 # Custom Loss Functions and Metrics
 def jacard_coef(y_true, y_pred):
@@ -48,7 +52,14 @@ model = load_model("models/satellite_standard_unet_100epochs_7May2021.hdf5",
 
 PATCH_SIZE = 256
 N_CLASSES = 6
-CLASS_COLORS = [(0, 0, 255), (0, 255, 0), (255, 255, 0), (255, 0, 0), (128, 0, 128), (255, 165, 0)]
+CLASS_COLORS = [
+    (226, 169, 41),   # Water - #E2A929
+    (254, 221, 58),   # Vegetation - #FEDD3A
+    (110, 193, 228),  # Road - #6EC1E4
+    (60, 16, 152),    # Building - #3C1098
+    (132, 41, 246),   # Land - #8429F6
+    (155, 155, 155)   # Unlabeled - #9B9B9B
+]
 
 
 def preprocess_image(image_path):
@@ -68,20 +79,71 @@ def create_colored_mask(mask):
     color_mask = np.zeros((h, w, 3), dtype=np.uint8)
     for i in range(N_CLASSES):
         color_mask[mask == i] = CLASS_COLORS[i]
-    return color_mask
+    return cv2.cvtColor(color_mask, cv2.COLOR_RGB2BGR)
+
+
+PAGE_TITLE = "Welcome to My Website"
+
 
 @app.route('/')
-def home():
-    return render_template('index.html')
+def render_home_page():
+    return render_template('index.html', title=PAGE_TITLE)
+
+# Add these routes to your existing app.py file
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/how-it-works')
+def how_it_works():
+    return render_template('how-it-works.html')
+
+@app.route('/gallery')
+def gallery():
+    return render_template('gallery.html')
+
+
+@app.route('/result')
+def result():
+    input_image = request.args.get('input')
+    mask_image = request.args.get('mask')
+    confidence_map = request.args.get('confidence')
+
+    # Ensure default values for missing data
+    segmentation_data = {
+        'area_distribution': [15, 25, 20, 30, 5, 5],  # Replace with actual data
+        'class_coverage': [15, 25, 20, 30, 5, 5],
+        'stats': {
+            'total_area': '1.2 km²',
+            'building_density': '30%',
+            'green_space': '25%',
+            'water_coverage': '15%',
+            'road_density': '20%'
+        }
+    }
+
+    return render_template('result.html',
+                         input=input_image,
+                         mask=mask_image,
+                         confidence=confidence_map,
+                         segmentation_data=segmentation_data)
 
 @app.route('/upload', methods=['POST'])
 def upload():
     if 'file' not in request.files:
-        return redirect(request.url)
+        return jsonify({'error': 'No file selected'}), 400
+
     file = request.files['file']
     if file.filename == '':
-        return redirect(request.url)
-    if file:
+        return jsonify({'error': 'No file selected'}), 400
+
+    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+    if ('.' not in file.filename or
+            file.filename.rsplit('.', 1)[1].lower() not in allowed_extensions):
+        return jsonify({'error': 'Invalid file type'}), 400
+
+    try:
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
@@ -90,17 +152,38 @@ def upload():
         pred_mask, confidence = predict_segmentation(image_array)
 
         mask_colored = create_colored_mask(pred_mask)
-        mask_path = os.path.join(app.config['UPLOAD_FOLDER'], 'mask_' + filename)
+        mask_filename = 'mask_' + filename
+        mask_path = os.path.join(app.config['UPLOAD_FOLDER'], mask_filename)
         cv2.imwrite(mask_path, mask_colored)
 
-        confidence_map = np.uint8(confidence * 255)
-        confidence_path = os.path.join(app.config['UPLOAD_FOLDER'], 'confidence_' + filename)
-        cv2.imwrite(confidence_path, confidence_map)
+        confidence_filename = 'confidence_' + filename
+        confidence_path = os.path.join(app.config['UPLOAD_FOLDER'], confidence_filename)
+        cv2.imwrite(confidence_path, np.uint8(confidence * 255))
 
-        return render_template('result.html',
-                               input_image=url_for('static', filename='uploads/' + filename),
-                               output_mask=url_for('static', filename='uploads/mask_' + filename),
-                               confidence_map=url_for('static', filename='uploads/confidence_' + filename))
+        return jsonify({
+            'success': True,
+            'input_image': url_for('static', filename='uploads/' + filename, _external=True),
+            'output_mask': url_for('static', filename='uploads/' + mask_filename, _external=True),
+            'confidence_map': url_for('static', filename='uploads/' + confidence_filename, _external=True)
+        })
 
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+# Add this new route for displaying results
+@app.route('/result')
+def show_result():
+    input_image = request.args.get('input')
+    output_mask = request.args.get('mask')
+    confidence_map = request.args.get('confidence')
+
+    if not all([input_image, output_mask, confidence_map]):
+        abort(400, description="Missing required parameters")
+
+    return render_template('result.html',
+                           input_image=input_image,
+                           output_mask=output_mask,
+                           confidence_map=confidence_map)
 if __name__ == '__main__':
     app.run(debug=True)
