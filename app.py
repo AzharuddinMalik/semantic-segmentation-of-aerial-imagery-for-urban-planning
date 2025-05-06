@@ -1,6 +1,10 @@
 # app.py
-from flask import Flask, render_template, request, redirect, url_for, flash, abort
+import uuid
+
+from flask import Flask, render_template, request, redirect, url_for, flash, abort, logging
 import os
+
+from tensorflow.python.keras.backend import clear_session
 from werkzeug.utils import secure_filename
 import numpy as np
 import cv2
@@ -11,11 +15,14 @@ from flask import jsonify  # Add this import at the top
 from flask_wtf.csrf import CSRFProtect
 
 
+
 app = Flask(__name__)
-UPLOAD_FOLDER = 'static/uploads/'
+
+
+# Add after app initialization
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 
 # Custom Loss Functions and Metrics
 def jacard_coef(y_true, y_pred):
@@ -44,11 +51,18 @@ def focal_loss(gamma=2., alpha=.25):
 def dice_loss_plus_1focal_loss(y_true, y_pred):
     return dice_loss(y_true, y_pred) + focal_loss()(y_true, y_pred)
 
-model = load_model("models/satellite_standard_unet_100epochs_7May2021.hdf5",
-                   custom_objects={
-                       'jacard_coef': jacard_coef,
-                       'dice_loss_plus_1focal_loss': dice_loss_plus_1focal_loss
-                   })
+def load_model_safely():
+    clear_session()
+    return load_model(
+        "models/satellite_standard_unet_100epochs_7May2021.hdf5",
+        custom_objects={
+            'jacard_coef': jacard_coef,
+            'dice_loss_plus_1focal_loss': dice_loss_plus_1focal_loss
+        },
+        compile=False  # Reduce memory footprint
+    )
+
+model = load_model_safely()
 
 PATCH_SIZE = 256
 N_CLASSES = 6
@@ -144,8 +158,10 @@ def upload():
         return jsonify({'error': 'Invalid file type'}), 400
 
     try:
-        filename = secure_filename(file.filename)
+        # Generate unique filename
+        filename = secure_filename(f"{uuid.uuid4().hex}_{file.filename}")
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        # Save in chunks to avoid memory issues
         file.save(filepath)
 
         image_array = preprocess_image(filepath)
@@ -168,6 +184,7 @@ def upload():
         })
 
     except Exception as e:
+        logging.error(f"Upload error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 
@@ -185,5 +202,7 @@ def show_result():
                            input_image=input_image,
                            output_mask=output_mask,
                            confidence_map=confidence_map)
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
