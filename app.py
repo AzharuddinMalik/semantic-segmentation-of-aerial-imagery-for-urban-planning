@@ -24,6 +24,9 @@ UPLOAD_FOLDER = os.path.join('static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# # Ensure this path matches Render's persistent storage
+# app.config['UPLOAD_FOLDER'] = '/opt/render/project/src/static/uploads'
+
 # Custom Loss Functions and Metrics
 def jacard_coef(y_true, y_pred):
     intersection = tf.reduce_sum(y_true * y_pred)
@@ -145,23 +148,25 @@ def result():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file selected'}), 400
-
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No file selected'}), 400
-
-    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
-    if ('.' not in file.filename or
-            file.filename.rsplit('.', 1)[1].lower() not in allowed_extensions):
-        return jsonify({'error': 'Invalid file type'}), 400
-
     try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file selected'}), 400
+
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'error': 'No file selected'}), 400
+
+        allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+        if ('.' not in file.filename or
+                file.filename.rsplit('.', 1)[1].lower() not in allowed_extensions):
+            return jsonify({'error': 'Invalid file type'}), 400
+
+        # Create upload directory if not exists
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
         # Generate unique filename
-        filename = secure_filename(f"{uuid.uuid4().hex}_{file.filename}")
+        filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        # Save in chunks to avoid memory issues
         file.save(filepath)
 
         image_array = preprocess_image(filepath)
@@ -177,11 +182,11 @@ def upload():
         cv2.imwrite(confidence_path, np.uint8(confidence * 255))
 
         return jsonify({
-            'success': True,
-            'input_image': url_for('static', filename='uploads/' + filename, _external=True),
-            'output_mask': url_for('static', filename='uploads/' + mask_filename, _external=True),
-            'confidence_map': url_for('static', filename='uploads/' + confidence_filename, _external=True)
+            'input_image': url_for('static', filename=f'uploads/{filename}'),
+            'output_mask': url_for('static', filename=f'uploads/mask_{filename}'),
+            'confidence_map': url_for('static', filename=f'uploads/confidence_{filename}')
         })
+
 
     except Exception as e:
         logging.error(f"Upload error: {str(e)}")
