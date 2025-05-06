@@ -1,9 +1,7 @@
 Flask==3.0.3
-tensorflow==2.15.0
+flask-wtf==1.2.1
+tensorflow-cpu==2.15.0  # Changed from tensorflow
 opencv-python-headless==4.9.0.80
 numpy==1.26.4
 pillow==10.3.0
-matplotlib==3.8.4
-scikit-image==0.22.0
-scikit-learn==1.4.2
 gunicorn==21.2.0
