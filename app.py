@@ -1,20 +1,14 @@
 # app.py
-import uuid
-
-from flask import Flask, render_template, request, redirect, url_for, flash, abort, logging
+import base64
 import os
-
-from tensorflow.python.keras.backend import clear_session
-from werkzeug.utils import secure_filename
-import numpy as np
 import cv2
-from tensorflow.keras.models import load_model
-import tensorflow.keras.backend as K
+import numpy as np
 import tensorflow as tf
+import tensorflow.keras.backend as K
+from flask import Flask, render_template, request, url_for, abort, logging
 from flask import jsonify  # Add this import at the top
-from flask_wtf.csrf import CSRFProtect
-
-
+from tensorflow.keras.models import load_model
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -55,15 +49,18 @@ def dice_loss_plus_1focal_loss(y_true, y_pred):
     return dice_loss(y_true, y_pred) + focal_loss()(y_true, y_pred)
 
 def load_model_safely():
-    clear_session()
-    return load_model(
+    K.clear_session()
+    model = load_model(
         "models/satellite_standard_unet_100epochs_7May2021.hdf5",
         custom_objects={
             'jacard_coef': jacard_coef,
             'dice_loss_plus_1focal_loss': dice_loss_plus_1focal_loss
         },
-        compile=False  # Reduce memory footprint
+        compile=False
     )
+    # Warm-up model
+    model.predict(np.zeros((1, 256, 256, 3)))
+    return model
 
 model = load_model_safely()
 
@@ -146,6 +143,7 @@ def result():
                          confidence=confidence_map,
                          segmentation_data=segmentation_data)
 
+
 @app.route('/upload', methods=['POST'])
 def upload():
     try:
@@ -156,41 +154,40 @@ def upload():
         if file.filename == '':
             return jsonify({'error': 'No file selected'}), 400
 
-        allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
-        if ('.' not in file.filename or
-                file.filename.rsplit('.', 1)[1].lower() not in allowed_extensions):
+        # Verify file content
+        if not file.content_type.startswith('image/'):
             return jsonify({'error': 'Invalid file type'}), 400
 
-        # Create upload directory if not exists
-        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        # In-memory processing
+        img_bytes = file.read()
+        nparr = np.frombuffer(img_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-        # Generate unique filename
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
+        if img is None:
+            return jsonify({'error': 'Invalid image file'}), 400
 
-        image_array = preprocess_image(filepath)
+        # Process image
+        img_resized = cv2.resize(img, (PATCH_SIZE, PATCH_SIZE))
+        image_array = np.expand_dims(img_resized / 255.0, axis=0)
+
+        # Prediction
         pred_mask, confidence = predict_segmentation(image_array)
-
         mask_colored = create_colored_mask(pred_mask)
-        mask_filename = 'mask_' + filename
-        mask_path = os.path.join(app.config['UPLOAD_FOLDER'], mask_filename)
-        cv2.imwrite(mask_path, mask_colored)
 
-        confidence_filename = 'confidence_' + filename
-        confidence_path = os.path.join(app.config['UPLOAD_FOLDER'], confidence_filename)
-        cv2.imwrite(confidence_path, np.uint8(confidence * 255))
+        # Convert to base64
+        _, buffer_orig = cv2.imencode('.png', img)
+        _, buffer_mask = cv2.imencode('.png', mask_colored)
+        _, buffer_conf = cv2.imencode('.png', np.uint8(confidence * 255))
 
         return jsonify({
-            'input_image': url_for('static', filename=f'uploads/{filename}'),
-            'output_mask': url_for('static', filename=f'uploads/mask_{filename}'),
-            'confidence_map': url_for('static', filename=f'uploads/confidence_{filename}')
+            'input_image': f'data:image/png;base64,{base64.b64encode(buffer_orig).decode("utf-8")}',
+            'output_mask': f'data:image/png;base64,{base64.b64encode(buffer_mask).decode("utf-8")}',
+            'confidence_map': f'data:image/png;base64,{base64.b64encode(buffer_conf).decode("utf-8")}'
         })
 
-
     except Exception as e:
-        logging.error(f"Upload error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        logging.error(f"Upload error: {str(e)}", exc_info=True)
+        return jsonify({'error': 'Image processing failed'}), 500
 
 
 # Add this new route for displaying results
