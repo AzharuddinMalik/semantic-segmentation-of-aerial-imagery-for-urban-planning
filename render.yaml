@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: urban-planning
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: 1
+      - key: GUNICORN_CMD_ARGS
+        value: "--workers=1 --timeout 300"
