@@ -63,6 +63,11 @@ def load_model_safely():
     return model
 
 model = load_model_safely()
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+with open('model.tflite', 'wb') as f:
+    f.write(tflite_model)
+
 
 PATCH_SIZE = 256
 N_CLASSES = 6
