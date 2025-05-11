@@ -46,20 +46,16 @@ dropArea.addEventListener("drop", function(e) {
 
 // Form submission handler
 // Form submission handler
+// Modify form submission handler
 uploadForm.addEventListener("submit", async function(e) {
     e.preventDefault();
-
-    if (!fileElem.files.length) {
-        alert("Please select a file first");
-        return;
-    }
-
     const submitButton = uploadForm.querySelector('button[type="submit"]');
     const originalText = submitButton.innerHTML;
-    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
-    submitButton.disabled = true;
 
     try {
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+        submitButton.disabled = true;
+
         const formData = new FormData();
         formData.append('file', fileElem.files[0]);
 
@@ -68,19 +64,15 @@ uploadForm.addEventListener("submit", async function(e) {
             body: formData
         });
 
-        const data = await response.json();
-
         if (!response.ok) {
-            throw new Error(data.error || 'Upload failed');
+            const error = await response.text();
+            throw new Error(error || 'Upload failed');
         }
 
-        // Redirect to result page with data as URL parameters
-        const params = new URLSearchParams({
-            input: data.input_image,
-            mask: data.output_mask,
-            confidence: data.confidence_map
-        });
-        window.location.href = `/result?${params.toString()}`;
+        const data = await response.json();
+
+        // Update navigation to use base64 data
+        window.location.href = `/result?input=${encodeURIComponent(data.input_image)}&mask=${encodeURIComponent(data.output_mask)}&confidence=${encodeURIComponent(data.confidence_map)}`;
 
     } catch (error) {
         console.error('Upload error:', error);
