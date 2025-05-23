@@ -1,7 +1,9 @@
 # Semantic Segmentation of Aerial Imagery 🌍
 
 This project focuses on pixel-wise classification of aerial/satellite imagery using deep learning models like U-Net and ResNet-based UNet. The goal is to extract meaningful land features such as buildings, roads, water, and vegetation for urban planning, agriculture, and environmental analysis.
-
+<p align="center">
+  <img src="IMAGES/Home Page.png" width="600"/>
+</p>
 ## 🚀 Project Overview
 
 - Segment satellite images into 6 categories: Buildings, Land, Roads, Vegetation, Water, and Unlabeled areas.
@@ -65,7 +67,15 @@ For questions or collaboration, feel free to connect via GitHub Issues or Pull R
 
 ### 📜 **GitHub Project Description**
 > Semantic segmentation of satellite imagery using deep learning (U-Net, ResNet34). Includes model training, evaluation, and a web app for real-time predictions.
-
+<p align="center">
+  <img src="IMAGES/About Project.png" width="600"/>
+</p>
+<p align="center">
+  <img src="IMAGES/Gallary.png" width="600"/>
+</p>
+<p align="center">
+  <img src="IMAGES/How It Works.png" width="600"/>
+</p>
 ---
 
 ### ✅ **Feature & Advantages Summary**
